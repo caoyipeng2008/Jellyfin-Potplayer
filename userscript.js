@@ -11,8 +11,17 @@
     let openPotplayer = (itemid) => {
         let userid = ConnectionManager.getLastUsedServer().UserId;
         ApiClient.getItem(userid, itemid).then(r => {
-            if (r.Path) {
-                let path = r.Path.replace(/\\/g, '/').replace('D:', 'Z:');
+           if (r.Path) {
+                // let path = r.Path.replace(/\\/g, '/').replace('D:', 'Z:');
+                console.log("UserId:" + JSON.parse(localStorage.jellyfin_credentials).Servers[0].UserId);
+                console.log("ManualAddress:" + JSON.parse(localStorage.jellyfin_credentials).Servers[0].ManualAddress);
+                console.log("AccessToken:" + JSON.parse(localStorage.jellyfin_credentials).Servers[0].AccessToken);
+                //http://fifth.f3322.org:8096/Items/f547578c98738cbd2882dd4cbe302d9e/Download?api_key=2855b22974aa47ad838dab536e74fa91
+                let path = JSON.parse(localStorage.jellyfin_credentials).Servers[0].ManualAddress
+                           + "/Items/" + itemid
+                           + "/Download?api_key="
+                           + JSON.parse(localStorage.jellyfin_credentials).Servers[0].AccessToken
+
                 console.log(path);
                 window.open('potplayer://' + path)
             } else {
