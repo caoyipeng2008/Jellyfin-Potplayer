@@ -3,13 +3,14 @@
 // @version      0.1
 // @description  play video with Potplayer
 // @author       Tccoin
-// @match        http://10.0.0.17:8096/jellyfin/web/index.html
+// @match        http://172.16.0.91:8096/web/index.html
 // ==/UserScript==
 
 (function () {
     'use strict';
     let openPotplayer = (itemid) => {
-        let userid = ConnectionManager.getLastUsedServer().UserId;
+        // let userid = ConnectionManager.getLastUsedServer().UserId;
+        let userid = "e88c97bdcbd94027a48db31948c43236";
         ApiClient.getItem(userid, itemid).then(r => {
            if (r.Path) {
                 // let path = r.Path.replace(/\\/g, '/').replace('D:', 'Z:');
@@ -64,10 +65,24 @@
         for (let button of buttons) {
             button.removeAttribute('data-action');
             button.addEventListener('click', e => {
-                e.stopPropagation();
-                let item = e.target;
-                while (!item.hasAttribute('data-id')) { item = item.parentNode }
-                let itemid = item.getAttribute('data-id');
+                //e.stopPropagation();
+                //let item = e.target;
+                //while (!item.hasAttribute('data-id')) { item = item.parentNode }
+                //let itemid = item.getAttribute('data-id');
+
+                let getQueryString = (variable) => {
+                    let query = window.location.href.split("?")[1];
+                    let vars = query.split("&");
+                    for (var i=0;i<vars.length;i++) {
+                        var pair = vars[i].split("=");
+                        if(pair[0] == variable)
+                        {
+                            return pair[1];
+                        }
+                    }
+                    return(false);
+                };
+                let itemid = getQueryString('id');
                 openPotplayer(itemid);
             });
         }
@@ -91,6 +106,7 @@
             item.removeAttribute('data-src');
         };
     };
+
 
     window.addEventListener('scroll', lazyload);
 
